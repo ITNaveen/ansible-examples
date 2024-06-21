@@ -1,29 +1,38 @@
 ---
-- name: installing packages for python env
-  become: yes
+- name: Installing packages for Python environment
+  become: yes  
   apt:
-    name:
-      - python3-pip
-      - git
-    update_cache: yes
+    name: 
+      - python3-pip  # Name of the package to install
+    update_cache: yes  # Update the apt cache before installing
 
 - name: Creates directory
-  file:
-    path: ./basic-http-server
-    state: directory
+  file:  # module for files and directories
+    path: ./basic-http-server  # Path of the directory to create
+    state: directory  # Ensure the path is a directory. Other states can be file, link, absent, etc.
 
-- name: Read-write git checkout from github
-  ansible.builtin.git:
-    repo: https://github.com/rahulwagh/python-example.git
-    dest: ./basic-http-server
+- name: Install apache2
+  become: yes  
+  apt:  
+    name:
+      - apache2  
+    update_cache: yes  
+    state: latest  # Ensure the package is installed and up-to-date. Other states can be present, absent, etc.
 
-- name: Run the hugo command locally
-  connection: local
-  shell: "pwd"
-  register: localPath
 
-- debug:
-    msg: "{{ localPath.stdout }}"
+# - name: Read-write git checkout from github
+#   ansible.builtin.git:
+#     repo: https://github.com/rahulwagh/python-example.git
+#     dest: ./basic-http-server
 
-- name: Execute the script
-  command: nohup python3 /home/rahulwagh/basic-http-server/basic-http-server/app.py &
+# - name: Run the hugo command locally
+#   connection: local
+#   shell: "pwd"
+#   register: localPath
+
+# - debug:
+#     msg: "{{ localPath.stdout }}"
+
+# - name: Execute the script
+#   command: nohup python3 /home/rahulwagh/basic-http-server/basic-http-server/app.py &
+
